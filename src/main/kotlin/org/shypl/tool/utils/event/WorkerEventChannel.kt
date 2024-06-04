@@ -1,7 +1,7 @@
 package org.shypl.tool.utils.event
 
+import org.shypl.tool.lang.EMPTY_FUNCTION_1
 import org.shypl.tool.utils.Cancelable
-import org.shypl.tool.utils.EMPTY_FUNCTION_1
 import org.shypl.tool.utils.ErrorHandler
 import org.shypl.tool.utils.assistant.Assistant
 import org.shypl.tool.utils.worker.Worker

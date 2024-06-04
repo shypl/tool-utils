@@ -1,8 +1,8 @@
 plugins {
-	kotlin("jvm") version "1.9.20"
+	kotlin("jvm") version "2.0.0"
 	id("java-library")
 	id("maven-publish")
-	id("nebula.release") version "17.2.2"
+	id("nebula.release") version "19.0.8"
 }
 
 group = "org.shypl.tool"
