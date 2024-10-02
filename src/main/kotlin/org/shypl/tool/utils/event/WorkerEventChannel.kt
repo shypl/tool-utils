@@ -13,20 +13,12 @@ import kotlin.reflect.KClass
 
 class WorkerEventChannel<E : Any>(
 	assistant: Assistant,
-	private val errorHandler: ErrorHandler,
-	private val emerger: EventTypeEmerger<E>,
-	private val observer: EventChannelObserver
+	private val emerger: EventEmerger<E>,
+	private val errorHandler: ErrorHandler
 ) : ClearableEventChannel<E> {
 	
 	private val worker = Worker(assistant, errorHandler)
 	private val receiversMap = ConcurrentHashMap<KClass<out E>, Receivers>()
-	
-	constructor(type: KClass<E>, assistant: Assistant, errorHandler: ErrorHandler): this(
-		assistant,
-		errorHandler,
-		EventTypeEmerger(type),
-		DummyEventChannelObserver
-	)
 	
 	override fun <T : E> receiveEvent(type: KClass<T>, receiver: (T) -> Unit): Cancelable {
 		return receiversMap.getOrPut(type, this::Receivers).add(receiver)
@@ -51,9 +43,8 @@ class WorkerEventChannel<E : Any>(
 		
 		fun <T : Any> add(receiver: (T) -> Unit): Cancelable {
 			@Suppress("UNCHECKED_CAST")
-			val r = Receiver(receiver as (Any) -> Unit, receivers, observer)
+			val r = Receiver(receiver as (Any) -> Unit, receivers)
 			receivers.add(r)
-			observer.observeReceiverAdded()
 			return r
 		}
 		
@@ -73,14 +64,11 @@ class WorkerEventChannel<E : Any>(
 	private class Receiver(
 		@Volatile private var receiver: (Any) -> Unit,
 		@Volatile private var receivers: MutableCollection<Receiver>,
-		@Volatile private var observer: EventChannelObserver
 	) : Cancelable {
 		override fun cancel() {
 			if (receivers.remove(this)) {
-				observer.observeReceiverRemoved()
 				receiver = EMPTY_FUNCTION_1
 				receivers = Collections.emptySet()
-				observer = DummyEventChannelObserver
 			}
 		}
 		
