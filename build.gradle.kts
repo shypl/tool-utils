@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
 	implementation("org.shypl.tool:tool-lang:1.0.0-SNAPSHOT")
+	implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.1")
 	implementation(kotlin("reflect"))
 	testImplementation(kotlin("test"))
 }
