@@ -161,7 +161,7 @@ open class Worker(
 	}
 	
 	private fun defineCurrentThread(): Long {
-		return Thread.currentThread().id
+		return Thread.currentThread().threadId()
 	}
 	
 	private fun assignWorkingThread() {
