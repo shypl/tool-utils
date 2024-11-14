@@ -1,14 +1,14 @@
 plugins {
-	kotlin("jvm") version "2.0.20"
+	kotlin("jvm") version "2.0.21"
 	id("java-library")
 	id("maven-publish")
-	id("nebula.release") version "19.0.8"
+	id("nebula.release") version "19.0.10"
 }
 
 group = "org.shypl.tool"
 
 kotlin {
-	jvmToolchain(17)
+	jvmToolchain(21)
 }
 
 repositories {
