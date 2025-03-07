@@ -6,7 +6,7 @@ import kotlin.random.Random
 abstract class WeightRandomizer {
 	protected abstract val totalWeight: Int
 	
-	protected abstract fun getWeight(index: Int): Int
+	abstract fun getWeight(index: Int): Int
 	
 	fun nextIndex(): Int {
 		val r = Random.nextInt(totalWeight)

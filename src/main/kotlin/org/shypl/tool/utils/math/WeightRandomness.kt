@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.function.Supplier
 
 class WeightRandomness<T>(
-	private val values: List<T>,
-	private val weights: WeightRandomizer
+	val values: List<T>,
+	val weights: WeightRandomizer
 ) : Supplier<T> {
 	
 	constructor(values: List<T>, weights: IntArray) : this(values, WeightRandomizer.Fixed(weights))
@@ -18,12 +18,14 @@ class WeightRandomness<T>(
 	override fun get(): T {
 		return values[weights.nextIndex()]
 	}
+	
+	val entries: Map<T, Int> get() = values.mapIndexed { i, v -> Pair(v, weights.getWeight(i)) }.associate { it }
 }
 
-fun <T> Collection<Pair<T, Int>>.randomize(): Supplier<T> {
+fun <T> Collection<Pair<T, Int>>.randomize(): WeightRandomness<T> {
 	return WeightRandomness(this)
 }
 
-fun <T> Map<T, Int>.randomize(): Supplier<T> {
+fun <T> Map<T, Int>.randomize(): WeightRandomness<T> {
 	return WeightRandomness(this)
 }
